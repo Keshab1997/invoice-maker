@@ -21,68 +21,100 @@
 
     <div id="appPage" class="page hidden">
         <header>
-            <h1>Daily Cash Report</h1>
-            <button onclick="logout()" class="logout-btn">Logout</button>
+            <h1>📄 Invoice Maker</h1>
+            <div>
+                <button onclick="showHistory()" class="history-btn">📋 History</button>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
         </header>
 
         <div class="container">
-            <div class="header-section">
-                <div class="input-group">
-                    <label>Date</label>
+            <div class="top-section">
+                <input type="text" id="customerName" placeholder="Customer Name" onchange="saveData()">
+            </div>
+
+            <input type="text" id="reportTitle" class="report-title" value="DAILY CASH REPORT" onchange="saveData()">
+            <hr>
+
+            <div class="header-row">
+                <div>
+                    <label><input type="text" id="dateLabel" value="Date:" onchange="saveData()" class="label-input"></label>
                     <input type="date" id="reportDate" onchange="saveData()">
                 </div>
-                <div class="input-group">
-                    <label>Opening Balance</label>
-                    <input type="number" id="openingBal" placeholder="0.00" onchange="saveData(); calculate()">
+                <div>
+                    <label><input type="text" id="openingBalLabel" value="Opening Balance:" onchange="saveData()" class="label-input"></label>
+                    <input type="number" id="openingBal" placeholder="0.00" onchange="calculate()">
                 </div>
             </div>
 
             <div class="table-container">
-                <table id="reportTable">
+                <h3 class="section-title received-title"><input type="text" id="receivedTitle" value="Cash Received (+)" onchange="saveData()" class="section-input"></h3>
+                <table class="desktop-table">
                     <thead>
                         <tr>
-                            <th>Sl No.</th>
+                            <th>Sl</th>
                             <th>Name</th>
                             <th>Item</th>
                             <th>Rate</th>
                             <th>Amount</th>
                             <th>Total</th>
-                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="receivedBody"></tbody>
                 </table>
+                
+                <h3 class="section-title handover-title"><input type="text" id="handoverTitle" value="Cash Handover (-)" onchange="saveData()" class="section-input"></h3>
+                <table class="desktop-table">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Name</th>
+                            <th>Item</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="handoverBody"></tbody>
+                </table>
+                
+                <div class="mobile-cards" id="mobileCards"></div>
             </div>
 
             <div class="action-buttons">
-                <button onclick="addRow('received')" class="btn-received">
-                    <span>+</span> Cash Received
-                </button>
-                <button onclick="addRow('handover')" class="btn-handover">
-                    <span>-</span> Cash Handover
-                </button>
+                <button onclick="addRow('received')" class="btn-received">+ Received</button>
+                <button onclick="addRow('handover')" class="btn-handover">- Handover</button>
             </div>
 
             <div class="summary">
-                <div class="summary-item">
-                    <span>Petty Cash:</span>
-                    <strong id="pettyCash">0.00</strong>
-                </div>
-                <div class="summary-item total">
-                    <span>Total:</span>
-                    <strong id="grandTotal">0.00</strong>
-                </div>
+                <div class="summary-row"><strong><input type="text" id="totalReceivedLabel" value="Total Received:" onchange="saveData()" class="label-input"></strong> <span id="totalReceived">0.00</span></div>
+                <div class="summary-row"><strong><input type="text" id="totalHandoverLabel" value="Total Handover:" onchange="saveData()" class="label-input"></strong> <span id="totalHandover">0.00</span></div>
+                <div class="summary-row"><strong><input type="text" id="summaryOpeningLabel" value="Opening Balance:" onchange="saveData()" class="label-input"></strong> <span id="summaryOpening">0.00</span></div>
+                <div class="summary-row total-row"><strong><input type="text" id="closingBalLabel" value="Closing Balance:" onchange="saveData()" class="label-input"></strong> <span id="closingBal">0.00</span></div>
             </div>
 
             <div class="export-buttons">
-                <button onclick="exportAsImage()" class="btn-export">📸 Export as Image</button>
-                <button onclick="clearAll()" class="btn-clear">🗑️ Clear All</button>
+                <button onclick="saveToHistory()" class="btn-save">💾 Save to History</button>
+                <button onclick="exportAsPDF()" class="btn-pdf">📄 Download PDF</button>
+                <button onclick="clearAll()" class="btn-clear">🗑️ Clear</button>
             </div>
         </div>
     </div>
 
+    <div id="historyPage" class="page hidden">
+        <header>
+            <h1>📋 History</h1>
+            <button onclick="closeHistory()" class="logout-btn">← Back</button>
+        </header>
+        <div class="history-container">
+            <div id="historyList" class="history-list"></div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
