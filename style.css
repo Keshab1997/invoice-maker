@@ -185,30 +185,32 @@ body {
 /* App */
 #appPage {
     display: none;
+    flex-direction: column;
     width: 100%;
-    max-width: 1000px;
+    max-width: 100%;
     background: #f5f5f5;
     min-height: 100vh;
-    padding: 20px 10px;
+    padding: 0;
     animation: fadeIn 0.3s ease-out;
 }
 
 #appPage.active {
-    display: block;
+    display: flex;
 }
 
 #historyPage {
     display: none;
+    flex-direction: column;
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
     background: #f5f5f5;
     min-height: 100vh;
-    padding: 20px 10px;
+    padding: 0;
     animation: fadeIn 0.3s ease-out;
 }
 
 #historyPage.active {
-    display: block;
+    display: flex;
 }
 
 @keyframes fadeIn {
@@ -231,21 +233,17 @@ header {
     z-index: 100;
 }
 
-header div {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+header h1 {
+    color: #667eea;
+    font-size: 20px;
+    margin: 0;
 }
 
 header nav {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-}
-
-header h1 {
-    color: #667eea;
-    font-size: 20px;
+    align-items: center;
 }
 
 .logout-btn, .history-btn {
@@ -284,7 +282,9 @@ header h1 {
     padding: 20px;
     border-radius: 0;
     box-shadow: none;
-    margin-bottom: 60px;
+    margin: 0 auto;
+    max-width: 1000px;
+    width: 100%;
 }
 
 .history-container {
@@ -292,6 +292,7 @@ header h1 {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .container.export-mode {
