@@ -3,38 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Invoice Maker - Create, manage and export daily cash reports, invoices and bills with ease. Track cash received and handover with automatic calculations.">
     <meta name="theme-color" content="#6366f1">
-    <title>Invoice Maker</title>
+    <title>Invoice Maker - Professional Cash Report & Billing App</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <main>
     <div id="loginPage" class="page">
         <div class="login-container">
-            <div class="logo">💰</div>
+            <div class="logo" role="img" aria-label="Money bag icon">💰</div>
             <h1>Invoice Maker</h1>
-            <input type="text" id="username" placeholder="Username" autocomplete="off">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="login()">Login</button>
+            <form onsubmit="login(); return false;" aria-label="Login form">
+                <label for="username" class="visually-hidden">Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" autocomplete="username" required aria-required="true">
+                <label for="password" class="visually-hidden">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required aria-required="true">
+                <button type="submit" aria-label="Login to Invoice Maker">Login</button>
+            </form>
         </div>
     </div>
 
-    <div id="appPage" class="page hidden">
-        <header>
+    <div id="appPage" class="page hidden" role="application" aria-label="Invoice maker application">
+        <header role="banner">
             <h1>📄 Invoice Maker</h1>
-            <div>
-                <button onclick="showHistory()" class="history-btn">📋 History</button>
-                <button onclick="logout()" class="logout-btn">Logout</button>
-            </div>
+            <nav aria-label="Main navigation">
+                <button onclick="showHistory()" class="history-btn" aria-label="View history">📋 History</button>
+                <button onclick="logout()" class="logout-btn" aria-label="Logout from application">Logout</button>
+            </nav>
         </header>
 
-        <div class="container">
+        <div class="container" role="main">
             <div class="top-section">
-                <input type="text" id="customerName" placeholder="Customer Name" onchange="saveData()">
+                <label for="customerName" class="visually-hidden">Customer Name</label>
+                <input type="text" id="customerName" name="customerName" placeholder="Customer Name" onchange="saveData()" aria-label="Customer name">
             </div>
 
-            <input type="text" id="reportTitle" class="report-title" value="DAILY CASH REPORT" onchange="saveData()">
-            <hr>
+            <label for="reportTitle" class="visually-hidden">Report Title</label>
+            <input type="text" id="reportTitle" name="reportTitle" class="report-title" value="DAILY CASH REPORT" onchange="saveData()" aria-label="Report title">
+            <hr aria-hidden="true">
 
             <div class="header-row">
                 <div>
@@ -83,35 +93,41 @@
                 <div class="mobile-cards" id="mobileCards"></div>
             </div>
 
-            <div class="action-buttons">
-                <button onclick="addRow('received')" class="btn-received">+ Received</button>
-                <button onclick="addRow('handover')" class="btn-handover">- Handover</button>
+            <div class="action-buttons" role="group" aria-label="Add entry buttons">
+                <button onclick="addRow('received')" class="btn-received" aria-label="Add cash received entry">+ Received</button>
+                <button onclick="addRow('handover')" class="btn-handover" aria-label="Add cash handover entry">- Handover</button>
             </div>
 
-            <div class="summary">
-                <div class="summary-row"><strong><input type="text" id="totalReceivedLabel" value="Total Received:" onchange="saveData()" class="label-input"></strong> <span id="totalReceived">0.00</span></div>
-                <div class="summary-row"><strong><input type="text" id="totalHandoverLabel" value="Total Handover:" onchange="saveData()" class="label-input"></strong> <span id="totalHandover">0.00</span></div>
-                <div class="summary-row"><strong><input type="text" id="summaryOpeningLabel" value="Opening Balance:" onchange="saveData()" class="label-input"></strong> <span id="summaryOpening">0.00</span></div>
-                <div class="summary-row total-row"><strong><input type="text" id="closingBalLabel" value="Closing Balance:" onchange="saveData()" class="label-input"></strong> <span id="closingBal">0.00</span></div>
+            <div class="summary" role="region" aria-label="Cash summary">
+                <div class="summary-row"><strong><input type="text" id="totalReceivedLabel" value="Total Received:" onchange="saveData()" class="label-input" aria-label="Total received label"></strong> <span id="totalReceived" aria-live="polite">0.00</span></div>
+                <div class="summary-row"><strong><input type="text" id="totalHandoverLabel" value="Total Handover:" onchange="saveData()" class="label-input" aria-label="Total handover label"></strong> <span id="totalHandover" aria-live="polite">0.00</span></div>
+                <div class="summary-row"><strong><input type="text" id="summaryOpeningLabel" value="Opening Balance:" onchange="saveData()" class="label-input" aria-label="Opening balance label"></strong> <span id="summaryOpening" aria-live="polite">0.00</span></div>
+                <div class="summary-row total-row"><strong><input type="text" id="closingBalLabel" value="Closing Balance:" onchange="saveData()" class="label-input" aria-label="Closing balance label"></strong> <span id="closingBal" aria-live="polite">0.00</span></div>
             </div>
 
-            <div class="export-buttons">
-                <button onclick="saveToHistory()" class="btn-save">💾 Save to History</button>
-                <button onclick="exportAsPDF()" class="btn-pdf">📄 Download PDF</button>
-                <button onclick="clearAll()" class="btn-clear">🗑️ Clear</button>
+            <div class="export-buttons" role="group" aria-label="Export and clear buttons">
+                <button onclick="saveToHistory()" class="btn-save" aria-label="Save report to history">💾 Save to History</button>
+                <button onclick="exportAsPDF()" class="btn-pdf" aria-label="Download report as PDF">📄 Download PDF</button>
+                <button onclick="clearAll()" class="btn-clear" aria-label="Clear all data">🗑️ Clear</button>
             </div>
         </div>
     </div>
 
-    <div id="historyPage" class="page hidden">
-        <header>
+    <div id="historyPage" class="page hidden" role="region" aria-label="History page">
+        <header role="banner">
             <h1>📋 History</h1>
-            <button onclick="closeHistory()" class="logout-btn">← Back</button>
+            <button onclick="closeHistory()" class="logout-btn" aria-label="Go back to main page">← Back</button>
         </header>
         <div class="history-container">
-            <div id="historyList" class="history-list"></div>
+            <div id="historyList" class="history-list" role="list" aria-label="Saved reports"></div>
         </div>
     </div>
+    </main>
+
+    <datalist id="nameList"></datalist>
+    <datalist id="itemList"></datalist>
+    <datalist id="rateList"></datalist>
+    <datalist id="amountList"></datalist>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

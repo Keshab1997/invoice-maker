@@ -8,20 +8,26 @@ function login() {
     if (username && password) {
         localStorage.setItem('loggedIn', 'true');
         showApp();
+        return false;
     } else {
         alert('Please enter username and password');
+        return false;
     }
 }
 
 function logout() {
     localStorage.removeItem('loggedIn');
     document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('loginPage').classList.add('active');
     document.getElementById('appPage').classList.add('hidden');
+    document.getElementById('appPage').classList.remove('active');
 }
 
 function showApp() {
     document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('active');
     document.getElementById('appPage').classList.remove('hidden');
+    document.getElementById('appPage').classList.add('active');
     loadData();
 }
 
@@ -45,16 +51,17 @@ function addRow(type) {
     
     row.innerHTML = `
         <td>${tbody.rows.length}</td>
-        <td><input type="text" placeholder="Name" onchange="saveData()"></td>
-        <td><input type="text" placeholder="Item" onchange="saveData()"></td>
-        <td><input type="number" placeholder="0" value="0" min="0" onchange="calculate()"></td>
-        <td><input type="number" placeholder="0" value="0" min="0" onchange="calculate()"></td>
+        <td><input type="text" placeholder="Name" onchange="saveData()" list="nameList"></td>
+        <td><input type="text" placeholder="Item" onchange="saveData()" list="itemList"></td>
+        <td><input type="number" placeholder="0" min="0" onfocus="clearZero(this)" onblur="restoreZero(this)" onchange="calculate()" list="rateList"></td>
+        <td><input type="number" placeholder="0" min="0" onfocus="clearZero(this)" onblur="restoreZero(this)" onchange="calculate()" list="amountList"></td>
         <td class="total">0.00</td>
         <td><button class="delete-btn" onclick="deleteRow('${row.id}', '${type}')">Delete</button></td>
     `;
     
     row.dataset.type = type;
     addMobileCard(rowCounter, type);
+    updateDatalist();
     saveData();
 }
 
@@ -77,19 +84,19 @@ function addMobileCard(id, type) {
         <div class="card-body">
             <div class="card-field">
                 <label>Name</label>
-                <input type="text" placeholder="Name" onchange="syncData(${id})">
+                <input type="text" placeholder="Name" onchange="syncData(${id})" list="nameList">
             </div>
             <div class="card-field">
                 <label>Item</label>
-                <input type="text" placeholder="Item" onchange="syncData(${id})">
+                <input type="text" placeholder="Item" onchange="syncData(${id})" list="itemList">
             </div>
             <div class="card-field">
                 <label>Rate</label>
-                <input type="number" placeholder="0" value="0" min="0" onchange="syncData(${id}); calculate()">
+                <input type="number" placeholder="0" min="0" onfocus="clearZero(this)" onblur="restoreZero(this)" onchange="syncData(${id}); calculate()" list="rateList">
             </div>
             <div class="card-field">
                 <label>Amount</label>
-                <input type="number" placeholder="0" value="0" min="0" onchange="syncData(${id}); calculate()">
+                <input type="number" placeholder="0" min="0" onfocus="clearZero(this)" onblur="restoreZero(this)" onchange="syncData(${id}); calculate()" list="amountList">
             </div>
             <div class="card-total">Total: <span class="card-total-value">0.00</span></div>
         </div>
@@ -672,14 +679,18 @@ function saveToHistory() {
 // Show History
 function showHistory() {
     document.getElementById('appPage').classList.add('hidden');
+    document.getElementById('appPage').classList.remove('active');
     document.getElementById('historyPage').classList.remove('hidden');
+    document.getElementById('historyPage').classList.add('active');
     loadHistory();
 }
 
 // Close History
 function closeHistory() {
     document.getElementById('historyPage').classList.add('hidden');
+    document.getElementById('historyPage').classList.remove('active');
     document.getElementById('appPage').classList.remove('hidden');
+    document.getElementById('appPage').classList.add('active');
 }
 
 // Load History
@@ -736,4 +747,58 @@ function deleteFromHistory(id) {
         localStorage.setItem('reportHistory', JSON.stringify(history));
         loadHistory();
     }
+}
+
+// Clear Zero on Focus
+function clearZero(input) {
+    if (input.value === '0' || input.value === '') {
+        input.value = '';
+    }
+}
+
+// Restore Zero on Blur
+function restoreZero(input) {
+    if (input.value === '') {
+        input.value = '';
+    }
+}
+
+// Update Datalist with Suggestions
+function updateDatalist() {
+    const nameList = document.getElementById('nameList');
+    const itemList = document.getElementById('itemList');
+    const rateList = document.getElementById('rateList');
+    const amountList = document.getElementById('amountList');
+    
+    if (!nameList || !itemList || !rateList || !amountList) return;
+    
+    const history = JSON.parse(localStorage.getItem('reportHistory') || '[]');
+    const names = new Set();
+    const items = new Set();
+    const rates = new Set();
+    const amounts = new Set();
+    
+    history.forEach(record => {
+        if (record.data.received) {
+            record.data.received.forEach(item => {
+                if (item.name) names.add(item.name);
+                if (item.item) items.add(item.item);
+                if (item.rate) rates.add(item.rate);
+                if (item.amount) amounts.add(item.amount);
+            });
+        }
+        if (record.data.handover) {
+            record.data.handover.forEach(item => {
+                if (item.name) names.add(item.name);
+                if (item.item) items.add(item.item);
+                if (item.rate) rates.add(item.rate);
+                if (item.amount) amounts.add(item.amount);
+            });
+        }
+    });
+    
+    nameList.innerHTML = Array.from(names).map(n => `<option value="${n}">`).join('');
+    itemList.innerHTML = Array.from(items).map(i => `<option value="${i}">`).join('');
+    rateList.innerHTML = Array.from(rates).map(r => `<option value="${r}">`).join('');
+    amountList.innerHTML = Array.from(amounts).map(a => `<option value="${a}">`).join('');
 }
