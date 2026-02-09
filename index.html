@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Invoice Maker</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loginPage" class="page">
+        <div class="login-container">
+            <div class="logo">💰</div>
+            <h1>Invoice Maker</h1>
+            <input type="text" id="username" placeholder="Username" autocomplete="off">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <div id="appPage" class="page hidden">
+        <header>
+            <h1>Daily Cash Report</h1>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </header>
+
+        <div class="container">
+            <div class="header-section">
+                <div class="input-group">
+                    <label>Date</label>
+                    <input type="date" id="reportDate" onchange="saveData()">
+                </div>
+                <div class="input-group">
+                    <label>Opening Balance</label>
+                    <input type="number" id="openingBal" placeholder="0.00" onchange="saveData(); calculate()">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>Sl No.</th>
+                            <th>Name</th>
+                            <th>Item</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="addRow('received')" class="btn-received">
+                    <span>+</span> Cash Received
+                </button>
+                <button onclick="addRow('handover')" class="btn-handover">
+                    <span>-</span> Cash Handover
+                </button>
+            </div>
+
+            <div class="summary">
+                <div class="summary-item">
+                    <span>Petty Cash:</span>
+                    <strong id="pettyCash">0.00</strong>
+                </div>
+                <div class="summary-item total">
+                    <span>Total:</span>
+                    <strong id="grandTotal">0.00</strong>
+                </div>
+            </div>
+
+            <div class="export-buttons">
+                <button onclick="exportAsImage()" class="btn-export">📸 Export as Image</button>
+                <button onclick="clearAll()" class="btn-clear">🗑️ Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
